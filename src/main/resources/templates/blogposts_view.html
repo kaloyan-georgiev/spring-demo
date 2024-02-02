@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Blogposts </title>
+</head>
+<body>
+
+<form th:action="@{/blogposts}" method="post">
+    <div><label> Post title: <input type="text" name="title"/> </label></div>
+    <div><label> Contents: <textarea rows="10" cols="10" name="content"> </textarea> </label></div>
+    <div><input type="submit" value="Post"/></div>
+</form>
+</body>
+</html>
