@@ -2,6 +2,9 @@ package com.example.demo.controllers;
 
 import com.example.demo.repositories.BlogPostRepository;
 import com.example.demo.models.BlogPost;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +24,15 @@ class BlogPostController {
     }
 
     @GetMapping
-    private ResponseEntity<List<BlogPost>> findAll() {
-        return ResponseEntity.ok(repository.findAll());
+    private ResponseEntity<Page<BlogPost>> findPage(@RequestParam(name="page", required=false, defaultValue = "-1") String page,
+                                                    @RequestParam(name="size", required=false, defaultValue = "-1") String size) {
+        int pageInt = Integer.parseInt(page);
+        int sizeInt = Integer.parseInt(size);
+        if(pageInt == -1 || sizeInt == -1) {
+            return ResponseEntity.ok(repository.findAll(Pageable.unpaged()));
+
+        }
+        return ResponseEntity.ok(repository.findAll(Pageable.ofSize(sizeInt).withPage(pageInt)));
     }
     @GetMapping("/{requestedId}")
     private ResponseEntity<BlogPost> getBlogPost(@PathVariable String requestedId)
